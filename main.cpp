@@ -5,8 +5,8 @@
  * Author : zombi
  *
  * There are 3 configurations for the output pins: high, low, and floating.
- * Floating basically means the pin is disconnected, which is why if PORTA 
- * is left unconfigured as output, the output pins are basically left in a 
+ * Floating basically means the pin is disconnected, which is why if PORTA
+ * is left unconfigured as output, the output pins are basically left in a
  * disconnected, 'floating' state, and the LED stays off
  *
  * AVR pins can have one of four states:
@@ -16,19 +16,22 @@
  * 0    1   - input, pulled up
  * 1    0   - output, driven low
  * 1    1   - output, driven high
+ * 
+ * Timer 0 is a 16-bit timer => 2^16 ticks / overflow or 65536 ticks / overflow
+ * 
  */
 
 #include<avr/io.h>
 #include<avr/interrupt.h>
 
-// Use PortA Bit 5 to toggle LED 
+// Use PortA Bit 5 to toggle LED
 #define LED PA5
 
 // Timer0 ISR
 ISR (TIM0_OVF_vect) {
   PORTA ^= (1 << LED);
   // For 1 second at 16 MHz
-  TCNT0 = 63974;
+  TCNT0 = 64755;
 }
 
 int main(void) {
@@ -37,7 +40,7 @@ int main(void) {
   DDRA = (0x01 << LED);
 
   // For 1 sec at 16 MHz
-  TCNT0 = 63974;
+  TCNT0 = 64755;
   TCCR0A = 0x00;
 
   // Timer mode with 1024 pre-scaler (CLKio / 1024)
